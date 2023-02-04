@@ -1,16 +1,20 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<form action="/update/{{post.id}}" method="POST">
-    <label for="title">Title</label>
-    <input type="text" name="title" value="{{post.title}}">
-
-    <label for="detail">Detail</label>
-    <input type="text" name="detail" value="{{post.detail}}">
-
-    <label for="due">Due</label>
-    <input type="date" name="due" required value="{{post.due}}">
-
-    <input type="submit" value="Change">
+<form class="m-5" action="/update/{{post.id}}" method="POST">
+    <div class="pb-3">
+        <label class="form-label" for="title">Title</label>
+        <input class="form-control" type="text" name="title" value="{{post.title}}">
+    </div>
+    <div class="pb-3">
+        <label class="form-label" for="detail">Detail</label>
+        <input class="form-control" type="text" name="detail" value="{{post.detail}}">
+    </div>
+    <div class="pb-3 col-4">
+        <label class="form-label" for="due">Due</label>
+        <input class="form-control" type="date" name="due" value="{{post.due.date()}}" required>
+    </div>
+    <a href="/" role="button" class="btn btn-outline-primary">Return</a>
+    <input class="btn btn-primary" type="submit" value="Update">
 </form>
 {% endblock %}

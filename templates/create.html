@@ -2,15 +2,19 @@
 
 {% block body %}
 <form class="m-5" action="/" method="POST">
-    <label class="form-label" for="title">Title</label>
-    <input class="form-control" type="text" name="title">
-
-    <label class="form-label"  for="detail">Detail</label>
-    <input class="form-control" type="text" name="detail">
-
-    <label class="form-label"  for="due">Due</label>
-    <input class="form-control" type="date" name="due" required>
-
+    <div class="pb-3">
+        <label class="form-label" for="title">Title</label>
+        <input class="form-control" type="text" name="title">
+    </div>
+    <div class="pb-3">
+        <label class="form-label" for="detail">Detail</label>
+        <input class="form-control" type="text" name="detail">
+    </div>
+    <div class="pb-3 col-4">
+        <label class="form-label" for="due">Due</label>
+        <input class="form-control" type="date" name="due" required>
+    </div>
+    <a href="/" role="button" class="btn btn-outline-primary">Return</a>
     <input class="btn btn-primary" type="submit" value="Create">
 </form>
 {% endblock %}
