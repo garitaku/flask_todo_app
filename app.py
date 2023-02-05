@@ -1,6 +1,6 @@
 from datetime import datetime, date
 from flask import Flask, render_template, request, redirect
-from flask_login import UserMixin, LoginManager, login_user,login_required,logout_user
+from flask_login import UserMixin, LoginManager, login_user,login_required,logout_user,current_user
 from flask_sqlalchemy import SQLAlchemy
 
 import os
@@ -26,12 +26,15 @@ class Post(db.Model):
     title = db.Column(db.String(30), nullable=False)
     detail = db.Column(db.String(100))
     due = db.Column(db.DateTime, nullable=False)
+    user_id = db.Column(db.Integer,db.ForeignKey('user.id'),
+        nullable=False)
 
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), nullable=False, unique=True)
     password = db.Column(db.String(12))
+    posts = db.relationship('Post')
 
 
 try:
@@ -51,14 +54,17 @@ def index():
     if request.method == 'GET':
         # タスク期限が近い順に投稿を全部持ってくる
         posts = Post.query.order_by(Post.due).all()
-        return render_template('index.html', posts=posts, today=date.today())
+        print('現在のユーザー')
+        print(current_user)
+        return render_template('index.html', posts=posts, today=date.today(),user=current_user)
     else:
+        user_id = current_user.id
         title = request.form.get('title')
         detail = request.form.get('detail')
         due = request.form.get('due')
 
         due = datetime.strptime(due, '%Y-%m-%d')
-        new_post = Post(title=title, detail=detail, due=due)
+        new_post = Post(title=title, detail=detail, due=due,user_id=user_id )
         try:
             db.session.add(new_post)
             db.session.commit()
@@ -88,7 +94,6 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        # タスク期限が近い順に投稿を全部持ってくる
         return render_template('login.html')
     else:
         username = request.form.get('username')
@@ -97,7 +102,7 @@ def login():
         user=User.query.filter_by(username=username).first()
         if check_password_hash(user.password,password):
             login_user(user)
-            return redirect('/')
+            return redirect('/'+ user.username)
 
 @app.route('/logout')
 @login_required #デコレータ(ログアウトするにはログインされているのが前提)

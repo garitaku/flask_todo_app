@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block head %}
+<title>Update</title>
+{% endblock %}
+
 {% block body %}
 <form class="m-5" action="/update/{{post.id}}" method="POST">
     <div class="pb-3">

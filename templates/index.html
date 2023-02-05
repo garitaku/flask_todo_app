@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
-{% block body %}
+{% block head %}
+<title>Home</title>
+{% endblock %}
 
+{% block body %}
+<h1>ようこそ!No.{{user.id}} {{user.username}}さん！</h1>
 <a class="btn btn-info btn-lg m-5" href="/create" role="button">CRATE NEW TASK</a>
 <a class="btn btn-info btn-lg m-5" href="/logout" role="button">LOG OUT</a>
 {% for post in posts %}
