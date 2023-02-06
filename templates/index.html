@@ -5,21 +5,28 @@
 {% endblock %}
 
 {% block body %}
-<h1>ようこそ!No.{{user.id}} {{user.username}}さん！</h1>
-<a class="btn btn-info btn-lg m-5" href="/create" role="button">CRATE NEW TASK</a>
-<a class="btn btn-info btn-lg m-5" href="/logout" role="button">LOG OUT</a>
-{% for post in posts %}
-<div class="card w-50 mb-3" style="margin: auto;">
-    <div class="card-body">
-        {% if post.due.date() < today %} <div class="alert alert-warning" role="alert">
-            期限切れデス
-            {% endif %}
+<div class="container">
+    <h1>ようこそ!No.{{user.id}} {{user.username}}さん！</h1>
+    <a class="btn btn-info btn-lg m-5" href="/{{user.username}}/create" role="button">CRATE NEW TASK</a>
+    <a class="btn btn-info btn-lg m-5" href="/logout" role="button">LOG OUT</a>
+
+        {% for post in posts %}
+        <div class="card mb-3" style="margin: auto;">
+            <div class="card-body">
+                {% if post.due.date() < today %}
+                <div class="alert alert-warning" role="alert">
+                    期限切れデス
+                </div>
+                {% endif %}
+    
+    
             <h2 class="card-title">タイトル：{{post.title}}</h2>
             <p>期限：{{post.due.date()}}</p>
-            <a class="btn btn-secondary btn-sm" href="detail/{{post.id}}" role="button">Detail</a>
-            <a class="btn btn-success btn-sm" href="update/{{post.id}}" role="button">Update</a>
-            <a class="btn btn-danger btn-sm" href="delete/{{post.id}}" role="button">Delete</a>
-    </div>
+            <a class="btn btn-secondary btn-sm" href="{{user.username}}/detail/{{post.id}}" role="button">Detail</a>
+            <a class="btn btn-success btn-sm" href="{{user.username}}/update/{{post.id}}" role="button">Update</a>
+            <a class="btn btn-danger btn-sm" href="{{user.username}}/delete/{{post.id}}" role="button">Delete</a>
+            </div>
+        </div>
+        {% endfor %}
 </div>
-{% endfor %}
 {% endblock %}

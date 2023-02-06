@@ -5,12 +5,20 @@
 {% endblock %}
 
 {% block body %}
-<h1>ログイン画面</h1>
-<form action="" method="POST">
-    <label for="username">ユーザー名</label>
-    <input type="text" name="username" id="username">
-    <label for="password">パスワード</label>
-    <input type="password" name="password" id="password">
-    <input type="submit" value="ログイン">
-</form>
+<div class="container">
+    <h1>ログイン画面</h1>
+    <form method="POST">
+        <div class="mb-3">
+          <label for="username" class="form-label">ユーザー名</label>
+          <input type="text" class="form-control" id="username" name="username" placeholder="ユーザー名を入力" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="パスワードを入力" required>
+        </div>
+        <button type="submit" class="btn btn-primary">ログイン</button>
+        <a href="/signup" role="button" class="btn btn-secondary">新規登録</a>
+    </form>
+</div>
 {% endblock %}
+

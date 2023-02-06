@@ -37,25 +37,22 @@ class User(UserMixin, db.Model):
     posts = db.relationship('Post')
 
 
-try:
-    with app.app_context():
-        db.create_all()
-except:
-    print('既にデータベースが作成されています')
+
+with app.app_context():
+    db.create_all()
+
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/<string:username>', methods=['GET', 'POST'])
 @login_required
-def index():
+def index(username):
     if request.method == 'GET':
         # タスク期限が近い順に投稿を全部持ってくる
-        posts = Post.query.order_by(Post.due).all()
-        print('現在のユーザー')
-        print(current_user)
+        posts = Post.query.filter_by(user_id=current_user.id).order_by(Post.due).all()
         return render_template('index.html', posts=posts, today=date.today(),user=current_user)
     else:
         user_id = current_user.id
@@ -68,7 +65,7 @@ def index():
         try:
             db.session.add(new_post)
             db.session.commit()
-            return redirect('/')
+            return redirect('/'+ username)
         except:
             return "フォームの送信中に問題が発生しました"
 
@@ -112,26 +109,26 @@ def logout():
 
 
 
-@app.route('/create')
+@app.route('/<string:username>/create')
 @login_required
-def create():
-    return render_template('create.html')
+def create(username):
+    return render_template('create.html',username=username)
 
 
-@app.route('/detail/<int:id>')
+@app.route('/<string:username>/detail/<int:id>')
 @login_required
-def read(id):
+def read(username,id):
     post = Post.query.get(id)
-    return render_template('detail.html', post=post)
+    return render_template('detail.html', post=post,username=username)
 
 
-@app.route('/update/<int:id>', methods=['GET', 'POST'])
+@app.route('/<string:username>/update/<int:id>', methods=['GET', 'POST'])
 @login_required
-def update(id):
+def update(id,username):
     post = Post.query.get(id)
     if request.method == 'GET':
         # updateのページ
-        return render_template('update.html', post=post)
+        return render_template('update.html', post=post,user=current_user)
     else:
         # dbに反映
         post.title = request.form.get('title')
@@ -139,16 +136,16 @@ def update(id):
         post.due = datetime.strptime(request.form.get('due'), '%Y-%m-%d')
         db.session.commit()
         # トップページに
-        return redirect('/')
+        return redirect('/'+username)
 
 
-@app.route('/delete/<int:id>')
+@app.route('/<string:username>/delete/<int:id>')
 @login_required
-def delete(id):
+def delete(id,username):
     post = Post.query.get(id)
     db.session.delete(post)
     db.session.commit()
-    return redirect('/')
+    return redirect('/'+username)
 
 
 if __name__ == '__main__':

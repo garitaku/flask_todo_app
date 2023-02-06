@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-<form class="m-5" action="/" method="POST">
+<form class="m-5" action="/{{username}}" method="POST">
     <div class="pb-3">
         <label class="form-label" for="title">Title</label>
         <input class="form-control" type="text" name="title">
@@ -18,7 +18,7 @@
         <label class="form-label" for="due">Due</label>
         <input class="form-control" type="date" name="due" required>
     </div>
-    <a href="/" role="button" class="btn btn-outline-primary">Return</a>
+    <a href="/{{username}}" role="button" class="btn btn-outline-primary">Return</a>
     <input class="btn btn-primary" type="submit" value="Create">
 </form>
 {% endblock %}
